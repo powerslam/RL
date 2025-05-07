@@ -18,7 +18,7 @@
   * 파라미터 설정
     | gamma | epsilon | epsilon decay          | batch size | epsodes |
     |-------|---------|------------------------|------------|---------|
-    | 1     | 1.0     | 지수 감소 식으로 변경   |     32     |   1e5   |
+    | 1     | 1.0     | 지수 감소 식으로 변경   |     32     |   4e4   |
   * 실험 결과
-    <br /><img src="" width="400">
+    <br /><img src="https://github.com/user-attachments/assets/75d3a106-8cd4-4cb9-9fd5-4748505e94f4" width="400">
 
