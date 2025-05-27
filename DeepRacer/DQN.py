@@ -109,7 +109,10 @@ class ReplayBuffer:
         self.priority[self.ptr] = torch.tensor(priority, device=self.device)
         
         idx += self.seg_tree_size
-        diff = priority - self.seg_tree[idx]
+        diff = priority - float(self.priority[self.seg_tree[idx]])
+        self.seg_tree[idx] = self.ptr
+        idx //= 2
+
         while idx:
             self.seg_tree[idx] += diff
             idx //= 2
@@ -120,13 +123,23 @@ class ReplayBuffer:
     def search(self, priority):
         idx = 1
 
+        while idx < self.seg_tree_size:
+            left = self.seg_tree[idx * 2]
+            right = self.seg_tree[idx * 2 + 1]
+
+            if priority <= left:
+                idx = idx * 2
+            else:
+                priority -= left
+                idx = idx * 2 + 1
+
         return idx - self.seg_tree_size
 
     def sample(self, batch_size):
         priorities = torch.rand(0, self.seg_tree[1], (batch_size,), device=self.device)
 
         ind = np.zeros(batch_size)
-        for idx, priority in enumerate(priorites):
-            ind[idx] = search(self.search(priority)
+        for idx, priority in enumerate(priorities):
+            ind[idx] = self.search(priority)
         
         return self.s[ind], self.a[ind], self.r[ind], self.s_prime[ind], self.terminated[ind]
